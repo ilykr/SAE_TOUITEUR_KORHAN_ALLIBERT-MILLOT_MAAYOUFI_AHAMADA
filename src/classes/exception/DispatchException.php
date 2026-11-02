@@ -1,5 +1,9 @@
 <?php
 
+declare (strict_types=1);
+
+namespace iutnc\sae\exception; 
+
 class DispatchException extends Exception
 {
 
