@@ -37,7 +37,7 @@
     </a>
 
     <div class="nav">
-      <a href="index.php" class="nav-item">
+      <a href="indexinterface.php" class="nav-item">
         <span class="nav-icon"><svg class="icon"><use href="#i-star"/></svg></span>
         <span class="nav-label">Fil d'actu</span>
       </a>
@@ -55,7 +55,7 @@
   <main class="main">
     <div class="content">
 
-      <a href="index.php" class="back" aria-label="Retour au fil d'actu">
+      <a href="indexinterface.php" class="back" aria-label="Retour au fil d'actu">
         <svg class="icon"><use href="#i-back"/></svg>
       </a>
 

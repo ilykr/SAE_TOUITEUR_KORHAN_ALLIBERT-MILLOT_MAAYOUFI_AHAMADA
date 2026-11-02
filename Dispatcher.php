@@ -1,30 +1,30 @@
 <?php
 declare(strict_types=1);
 
+use iutnc\sae\exception\DispatchException;
+
 class Dispatcher
 {
-    private string $action;
-    // Initialisation directe ici pour garantir qu'elle ne soit JAMAIS vide
-    private string $view = '';
-
-    public function __construct()
+    protected ?string $action = null;
+    protected array $actions = [];
+    public function __construct(){
+        $this->action = $_GET['action'] ?? 'default';
+    }
+    public function addRoute(string $action, string $action_class) : Dispatcher
     {
-        $this->action = $_GET['action'] ?? 'feed';
+        $this->actions[$action] = $action_class;
+        return $this;
     }
 
-    public function run(): void
-    {
-        switch ($this->action) {
-            case 'profil':
-                $this->view = __DIR__ . '/views/profile.php';
-                break;
-
-            case 'feed':
-            default:
-                $this->view = __DIR__ . '/views/feed.php';
-                break;
+    /**
+     * @throws DispatchException
+     */
+    public function run() : string {
+        if (array_key_exists($this->action, $this->actions)) {
+            $action_class = $this->actions[$this->action];
+            $action_instance = new $action_class();
+            return $action_instance->execute();
         }
-
-        require_once __DIR__ . '/views/layout.php';
+        throw new DispatchException("Action '{$this->action}' not found");
     }
 }

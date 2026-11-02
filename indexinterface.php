@@ -39,7 +39,7 @@
     </a>
 
     <div class="nav">
-      <a href="index.php" class="nav-item active" aria-current="page">
+      <a href="indexinterface.php" class="nav-item active" aria-current="page">
         <span class="nav-icon"><svg class="icon"><use href="#i-star"/></svg></span>
         <span class="nav-label">Fil d'actu</span>
       </a>
