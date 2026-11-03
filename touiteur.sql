@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost
--- Généré le : mar. 03 nov. 2026 à 15:02
--- Version du serveur : 10.4.28-MariaDB
--- Version de PHP : 8.2.4
+-- Host: localhost
+-- Generation Time: Nov 03, 2026 at 03:24 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,15 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `Touiteur`
+-- Database: `Touiteur`
 --
-CREATE DATABASE IF NOT EXISTS `Touiteur` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `Touiteur`;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `image`
+-- Table structure for table `image`
 --
 
 CREATE TABLE `image` (
@@ -37,7 +35,7 @@ CREATE TABLE `image` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `tag`
+-- Table structure for table `tag`
 --
 
 CREATE TABLE `tag` (
@@ -49,7 +47,7 @@ CREATE TABLE `tag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `touite`
+-- Table structure for table `touite`
 --
 
 CREATE TABLE `touite` (
@@ -62,7 +60,7 @@ CREATE TABLE `touite` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `touitetag`
+-- Table structure for table `touitetag`
 --
 
 CREATE TABLE `touitetag` (
@@ -74,7 +72,7 @@ CREATE TABLE `touitetag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `utilisateur`
+-- Table structure for table `utilisateur`
 --
 
 CREATE TABLE `utilisateur` (
@@ -85,58 +83,58 @@ CREATE TABLE `utilisateur` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `image`
+-- Indexes for table `image`
 --
 ALTER TABLE `image`
   ADD PRIMARY KEY (`chemin`);
 
 --
--- Index pour la table `tag`
+-- Indexes for table `tag`
 --
 ALTER TABLE `tag`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `touite`
+-- Indexes for table `touite`
 --
 ALTER TABLE `touite`
   ADD PRIMARY KEY (`utilisateur`,`texte`),
   ADD KEY `fk_image` (`image`);
 
 --
--- Index pour la table `touitetag`
+-- Indexes for table `touitetag`
 --
 ALTER TABLE `touitetag`
   ADD PRIMARY KEY (`utilisateur`,`texte`,`id`),
   ADD KEY `fk_tags` (`id`);
 
 --
--- Index pour la table `utilisateur`
+-- Indexes for table `utilisateur`
 --
 ALTER TABLE `utilisateur`
   ADD PRIMARY KEY (`mail`);
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `touite`
+-- Constraints for table `touite`
 --
 ALTER TABLE `touite`
   ADD CONSTRAINT `fk_image` FOREIGN KEY (`image`) REFERENCES `image` (`chemin`),
   ADD CONSTRAINT `fk_utilisateur` FOREIGN KEY (`utilisateur`) REFERENCES `utilisateur` (`mail`);
 
 --
--- Contraintes pour la table `touitetag`
+-- Constraints for table `touitetag`
 --
 ALTER TABLE `touitetag`
   ADD CONSTRAINT `fk_tags` FOREIGN KEY (`id`) REFERENCES `tag` (`id`),
-  ADD CONSTRAINT `fk_touite` FOREIGN KEY (`utilisateur`,`texte`) REFERENCES `TOUITE` (`utilisateur`, `texte`);
+  ADD CONSTRAINT `fk_utilisateurtexte` FOREIGN KEY (`utilisateur`,`texte`) REFERENCES `touite` (`utilisateur`, `texte`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

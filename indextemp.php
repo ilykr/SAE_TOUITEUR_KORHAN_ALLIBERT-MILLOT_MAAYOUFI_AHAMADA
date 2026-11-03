@@ -18,8 +18,8 @@ use iutnc\sae\actions\TagAction;
 $t=new Touite("a","b",["#l","#o"]);
 echo $t;
 
-$tabconf = parse_ini_file('config.db.ini');
-$pdo=new TouiteRepository($tabconf);
+$pdo=TouiteRepository::setConfig('config.db.ini');
+$repository=TouiteRepository::getInstance($pdo);
 
 $disp=new Dispatch();
 $disp->addDispatch('default',DefaultAction::class);

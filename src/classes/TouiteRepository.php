@@ -24,8 +24,23 @@ class TouiteRepository
         if ($conf === false) {
             throw new \Exception("Error reading configuration file");
         }
-        self::$config = [ 'dsn'=> "...",'user'=> $conf['username'],'pass'=> ... ];
+        self::$config = [ 'dsn'=> $conf['driver']
+    . ':host=' . $conf['host']
+    . ';dbname=' . $conf['database']
+    . ';charset=utf8','user'=> $conf['username'],'pass'=> $conf['password'] ];
     }
-    public function findPlaylistById(int $id): Playlist {}
-    public function saveEmptyPlaylist(Playlist $pl): Playlist {}
+    public function donnerTruc(string $name){
+        $query = "SELECT * from touite where utilisateur=:utilisateur";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['utilisateur' => $name]);
+        $rep=$stmt->fetch();
+        if ($rep===false){
+            $rep="aucun résultat trouvé";
+        }
+        return $rep;
+    }
+
+    public function chercheTag(string $tag){
+        
+    }
 }
