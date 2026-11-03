@@ -21,8 +21,8 @@ class PublierAction
     <header>
         <h1>Touiteur</h1>
         <nav>
-            <a href="index.html">Accueil</a>
-            <a href="publier.html">Publier un touite</a>
+            <a href="?action=default">Accueil</a>
+            <a href="?action=publier">Publier un touite</a>
         </nav>
     </header>
     <hr>
