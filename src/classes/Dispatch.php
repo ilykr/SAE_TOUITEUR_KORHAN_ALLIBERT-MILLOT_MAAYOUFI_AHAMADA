@@ -2,7 +2,8 @@
 
 declare (strict_types=1);
 
-namespace iutnc\sae; 
+namespace iutnc\sae;
+use iutnc\sae\exception\DispatchException;
 
 
 class Dispatch
