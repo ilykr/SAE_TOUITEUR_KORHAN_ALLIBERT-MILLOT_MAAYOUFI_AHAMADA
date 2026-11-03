@@ -1,0 +1,41 @@
+body {
+    font-family: sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+nav a {
+    margin-right: 15px;
+}
+
+.touite {
+    border-bottom: 1px solid black;
+    padding: 10px 0;
+}
+
+.touite p {
+    margin: 5px 0;
+}
+
+.date {
+    font-size: 0.9em;
+}
+
+.pagination {
+    margin-top: 15px;
+}
+
+.pagination a {
+    margin-right: 15px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+}
