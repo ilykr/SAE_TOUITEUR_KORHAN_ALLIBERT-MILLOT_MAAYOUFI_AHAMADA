@@ -7,11 +7,16 @@ $loader->register();
 
 use \iutnc\sae\Touite;
 use \iutnc\sae\Dispatch;
+use \iutnc\sae\TouiteRepository;
 use iutnc\sae\actions\PublierAction;
 use iutnc\sae\actions\DefaultAction;
 
+
 $t=new Touite("a","b",["#l","#o"]);
 echo $t;
+
+$tabconf = parse_ini_file('config.db.ini');
+$pdo=new TouiteRepository($tabconf);
 
 $disp=new Dispatch();
 $disp->addDispatch('default',DefaultAction::class);
