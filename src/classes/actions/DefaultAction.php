@@ -1,0 +1,54 @@
+<?php
+
+declare (strict_types=1);
+
+namespace iutnc\sae\actions;
+
+
+class DefaultAction
+{
+    public function execute():string{
+        return <<<HTML
+        <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Accueil - Touiteur</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Touiteur</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="?action=publier">Publier un touite</a>
+        </nav>
+    </header>
+    <hr>
+    <main>
+        <h2>Derniers touites</h2>
+        <article class="touite">
+            <p><a href="utilisateur.html">alice</a> <span class="date">- 03/11/2026 14:30</span></p>
+            <p>Bonjour tout le monde, voici mon premier touite avec un <a href="tag.html">#web</a> ... <a href="touite.html">Voir le détail</a></p>
+        </article>
+        <article class="touite">
+            <p><a href="utilisateur.html">alice</a> <span class="date">- 03/11/2026 14:30</span></p>
+            <p>Bonjour tout le monde, voici mon premier touite avec un <a href="tag.html">#web</a> ... <a href="touite.html">Voir le détail</a></p>
+        </article>
+        <article class="touite">
+            <p><a href="utilisateur.html">alice</a> <span class="date">- 03/11/2026 14:30</span></p>
+            <p>Bonjour tout le monde, voici mon premier touite avec un <a href="tag.html">#web</a> ... <a href="touite.html">Voir le détail</a></p>
+        </article>
+        <div class="pagination">
+            <a href="index.html">&lt; Page précédente</a>
+            <span>Page 2</span>
+            <a href="index.html">Page suivante &gt;</a>
+        </div>
+    </main>
+</body>
+</html>
+HTML;
+    }
+
+}

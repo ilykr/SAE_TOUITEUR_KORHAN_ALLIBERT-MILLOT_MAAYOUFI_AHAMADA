@@ -57,10 +57,7 @@
   <main class="main">
     <div class="content">
       <h1 class="sr-only">Fil d'actu</h1>
-
-declare (strict_types=1);
-
-<<<<<<< HEAD
+      
       <!-- Rédaction d'un touite : username et texte modifiables, boutons encore inactifs -->
       <section class="composer" aria-label="Écrire un touite">
         <span class="deco d1"></span>
@@ -197,14 +194,3 @@ declare (strict_types=1);
 
 </body>
 </html>
-=======
-require_once('src/loader/Psr4ClassLoader.php');
-$loader=new \loader\Psr4ClassLoader('iutnc\\sae','src/classes');
-$loader->register();
-
-use \iutnc\sae\Touite;
-
-$touite1=new Touite("a","b",["#l","#o"]);
-
-echo $touite1;
->>>>>>> 140caaf59183f9954980cf99914b98c9fc663e06
