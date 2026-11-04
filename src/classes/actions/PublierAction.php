@@ -1,17 +1,13 @@
 <?php
-
 declare(strict_types=1);
-
 namespace iutnc\sae\actions;
-<<<<<<< HEAD
-require_once('src/classes/TouiteRepository.php');
 use iutnc\sae\Touite;
 use iutnc\sae\TouiteRepository;
 
 class PublierAction
 {
-    public function execute(): string
-    {
+    public function execute(): string {
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return $this->traiterFormulaire();
         }
@@ -41,41 +37,6 @@ class PublierAction
     private function afficherFormulaire(): string
     {
         return <<<HTML
-=======
-
-require_once('src/classes/TouiteRepository.php');
-
-use iutnc\sae\TouiteRepository;
-
-
-class PublierAction
-{
-    public function execute():string{
-        $pdo=TouiteRepository::setConfig('config.db.ini');
-        $repository=TouiteRepository::getInstance($pdo);
-        $rep=$repository->donnerTruc('machin');
-        return $rep;
-        /*
-        <<<HTML
-        <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Publier - Touiteur</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <h1>Touiteur</h1>
-        <nav>
-            <a href="?action=default">Accueil</a>
-            <a href="?action=publier">Publier un touite</a>
-        </nav>
-    </header>
-    <hr>
-    <main>
->>>>>>> bf7bb103dc76f5b1672b7c55ccb21920d7e111a7
         <h2>Publier un touite</h2>
         <form action="?action=publier" method="post">
             <label for="utilisateur">Nom d'utilisateur</label>
@@ -86,15 +47,6 @@ class PublierAction
 
             <p><button type="submit">Publier</button></p>
         </form>
-<<<<<<< HEAD
         HTML;
-=======
-    </main>
-</body>
-</html>
-
-HTML;
-*/
->>>>>>> bf7bb103dc76f5b1672b7c55ccb21920d7e111a7
     }
 }
