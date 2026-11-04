@@ -10,6 +10,10 @@ class Touite
 
     public function __construct(protected String $texte, protected String $auteur, protected array $tags = []){}
 
+    public function getAuteur() { return $this->auteur; }
+    
+    public function getTexte() { return $this->texte; }
+
     public function __toString():String{
         return json_encode(get_object_vars($this));
     }

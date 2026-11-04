@@ -1,27 +1,31 @@
 <?php
 declare(strict_types=1);
 namespace iutnc\sae\actions;
+require_once('src/classes/TouiteRepository.php');
 use iutnc\sae\Touite;
 use iutnc\sae\TouiteRepository;
 
 class PublierAction
 {
     public function execute(): string {
-
+        TouiteRepository::setConfig('config.db.ini');
+        $repository=TouiteRepository::getInstance();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            return $this->traiterFormulaire();
+            $t = $this->traiterFormulaire();
+            $repository->ecrireTouite($t->getAuteur(), $t->getTexte());
         }
         return $this->afficherFormulaire();
     }
 
-    private function traiterFormulaire(): string
+    private function traiterFormulaire(): Touite
     {
         // Nettoyage des entrées
         $auteur = $_POST['utilisateur']; //trim(filter_var($_POST['utilisateur'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
         $texte  = $_POST['texte']; //trim(filter_var($_POST['texte'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
 
         if ($auteur === '' || $texte === '') {
-            return $this->afficherFormulaire() . '<p>Tous les champs sont obligatoires.</p>';
+            $touiteVide = new Touite("","", []);
+            return $touiteVide;
         }
 
         // Extraction des tags : #mot | A REFAIRE!!!
@@ -31,7 +35,7 @@ class PublierAction
         // Création du touite
         $touite = new Touite($texte, $auteur, $tags);
 
-        return "<p>Touite publié : {$touite}</p>" . $this->afficherFormulaire();
+        return $touite;
     }
 
     private function afficherFormulaire(): string
