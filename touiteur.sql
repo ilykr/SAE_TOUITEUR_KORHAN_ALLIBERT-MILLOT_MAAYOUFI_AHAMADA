@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 03, 2026 at 03:24 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Hôte : localhost
+-- Généré le : mer. 04 nov. 2026 à 11:22
+-- Version du serveur : 10.4.28-MariaDB
+-- Version de PHP : 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,123 +18,142 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `Touiteur`
+-- Base de données : `Touiteur`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `image`
+-- Structure de la table `Image`
 --
 
-CREATE TABLE `image` (
-  `description` varchar(50) NOT NULL,
-  `chemin` varchar(50) NOT NULL
+CREATE TABLE `Image` (
+  `DESCRIPTION` varchar(50) NOT NULL,
+  `ID` int(11) NOT NULL,
+  `CHEMIN` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tag`
+-- Structure de la table `Tags`
 --
 
-CREATE TABLE `tag` (
-  `id` varchar(10) NOT NULL,
-  `libelle` varchar(10) NOT NULL,
-  `description` varchar(50) NOT NULL
+CREATE TABLE `Tags` (
+  `LIBELLE` varchar(50) NOT NULL,
+  `ID` int(11) NOT NULL,
+  `DESCRIPTION` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `touite`
+-- Structure de la table `touite`
 --
 
 CREATE TABLE `touite` (
-  `utilisateur` varchar(20) NOT NULL,
-  `texte` varchar(235) NOT NULL,
-  `date` date NOT NULL,
-  `image` varchar(50) NOT NULL
+  `IDUSER` int(11) NOT NULL,
+  `TEXTE` varchar(235) DEFAULT NULL,
+  `DATE` timestamp NOT NULL DEFAULT current_timestamp(),
+  `IDIMAGE` int(11) DEFAULT NULL,
+  `ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `touitetag`
+-- Structure de la table `Touitetags`
 --
 
-CREATE TABLE `touitetag` (
-  `utilisateur` varchar(20) NOT NULL,
-  `texte` varchar(235) NOT NULL,
-  `id` varchar(10) NOT NULL
+CREATE TABLE `Touitetags` (
+  `IDUSER` int(11) NOT NULL,
+  `TEXTE` varchar(235) DEFAULT NULL,
+  `IDTAG` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utilisateur`
+-- Structure de la table `Utilisateur`
 --
 
-CREATE TABLE `utilisateur` (
-  `nom` varchar(20) NOT NULL,
-  `prenom` varchar(20) NOT NULL,
-  `mail` varchar(50) NOT NULL,
-  `nb` int(10) NOT NULL
+CREATE TABLE `Utilisateur` (
+  `NOM` varchar(20) DEFAULT NULL,
+  `ID` int(11) NOT NULL,
+  `PRENOM` varchar(20) DEFAULT NULL,
+  `MAIL` varchar(50) DEFAULT NULL,
+  `NB` int(11) DEFAULT NULL,
+  `USERNAME` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `image`
+-- Index pour la table `Image`
 --
-ALTER TABLE `image`
-  ADD PRIMARY KEY (`chemin`);
+ALTER TABLE `Image`
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `tag`
+-- Index pour la table `Tags`
 --
-ALTER TABLE `tag`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `Tags`
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `touite`
+-- Index pour la table `touite`
 --
 ALTER TABLE `touite`
-  ADD PRIMARY KEY (`utilisateur`,`texte`),
-  ADD KEY `fk_image` (`image`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `fk_image` (`IDIMAGE`),
+  ADD KEY `fk_utilisateur` (`IDUSER`);
 
 --
--- Indexes for table `touitetag`
+-- Index pour la table `Utilisateur`
 --
-ALTER TABLE `touitetag`
-  ADD PRIMARY KEY (`utilisateur`,`texte`,`id`),
-  ADD KEY `fk_tags` (`id`);
+ALTER TABLE `Utilisateur`
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `utilisateur`
---
-ALTER TABLE `utilisateur`
-  ADD PRIMARY KEY (`mail`);
-
---
--- Constraints for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- Constraints for table `touite`
+-- AUTO_INCREMENT pour la table `Image`
+--
+ALTER TABLE `Image`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `Tags`
+--
+ALTER TABLE `Tags`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `touite`
 --
 ALTER TABLE `touite`
-  ADD CONSTRAINT `fk_image` FOREIGN KEY (`image`) REFERENCES `image` (`chemin`),
-  ADD CONSTRAINT `fk_utilisateur` FOREIGN KEY (`utilisateur`) REFERENCES `utilisateur` (`mail`);
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for table `touitetag`
+-- AUTO_INCREMENT pour la table `Utilisateur`
 --
-ALTER TABLE `touitetag`
-  ADD CONSTRAINT `fk_tags` FOREIGN KEY (`id`) REFERENCES `tag` (`id`),
-  ADD CONSTRAINT `fk_utilisateurtexte` FOREIGN KEY (`utilisateur`,`texte`) REFERENCES `touite` (`utilisateur`, `texte`);
+ALTER TABLE `Utilisateur`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `touite`
+--
+ALTER TABLE `touite`
+  ADD CONSTRAINT `fk_image` FOREIGN KEY (`IDIMAGE`) REFERENCES `image` (`ID`),
+  ADD CONSTRAINT `fk_utilisateur` FOREIGN KEY (`IDUSER`) REFERENCES `utilisateur` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
