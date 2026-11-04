@@ -40,7 +40,26 @@ class TouiteRepository
         return $rep;
     }
 
+    public function ecrireTouite(string $utilisateur, string $texte){
+        $query = "INSERT INTO touite (utilisateur,texte) VALUES (:utilisateur, :texte)";
+        // faire un insert dans touite tag en recuperant le tag avec le #
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['utilisateur' => $utilisateur, 'texte' => $texte]);
+        $rep=$stmt->fetch();
+        if ($rep===false){
+            $rep="aucun résultat trouvé";
+        }
+        return $rep;
+    }
+
     public function chercheTag(string $tag){
-        
+        $query = "SELECT * FROM TOUITETAG WHERE TAG LIKE '#:tag'";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['tag' => $tag]);
+        $rep=$stmt->fetch();
+        if ($rep===false){
+            $rep="aucun résultat trouvé";
+        }
+        return $rep;
     }
 }

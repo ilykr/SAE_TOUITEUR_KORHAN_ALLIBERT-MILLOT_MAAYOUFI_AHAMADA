@@ -5,6 +5,10 @@ require_once('src/loader/Psr4ClassLoader.php');
 $loader=new \loader\Psr4ClassLoader('iutnc\\sae','src/classes');
 $loader->register();
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 use \iutnc\sae\Touite;
 use \iutnc\sae\Dispatch;
 use \iutnc\sae\TouiteRepository;
