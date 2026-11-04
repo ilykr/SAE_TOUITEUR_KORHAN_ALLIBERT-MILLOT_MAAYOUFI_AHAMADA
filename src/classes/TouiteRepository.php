@@ -41,15 +41,24 @@ class TouiteRepository
     }
 
     public function ecrireTouite(string $utilisateur, string $texte){
-        $query = "INSERT INTO touite (utilisateur,texte) VALUES (:utilisateur, :texte)";
-        // faire un insert dans touite tag en recuperant le tag avec le #
+        $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['utilisateur' => $utilisateur, 'texte' => $texte]);
+        $stmt->execute(['utilisateur' => $utilisateur]);
         $rep=$stmt->fetch();
         if ($rep===false){
-            $rep="aucun résultat trouvé";
+            $query="INSERT INTO Utilisateur (username) VALUES (:utilisateur)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $utilisateur]);
+            $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $utilisateur]);
+            $rep=$stmt->fetch();
         }
-        return $rep;
+        $query="INSERT INTO touite(iduser,texte) VALUES (:utilisateur,:texte)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte]);
+
+        // faire un insert dans touite tag en recuperant le tag avec le #
     }
 
     public function chercheTag(string $tag){
