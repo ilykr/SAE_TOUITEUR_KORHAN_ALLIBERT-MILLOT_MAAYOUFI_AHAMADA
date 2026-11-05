@@ -4,7 +4,7 @@ declare (strict_types=1);
 
 namespace iutnc\sae;
 use iutnc\sae\exception\DispatchException;
-
+use iutnc\sae\Layout;
 
 class Dispatch
 {
@@ -27,13 +27,13 @@ class Dispatch
      * @throws DispatchException
      */
     public function run(): string
-    {
-        if (array_key_exists($this->action, $this->actions)) {
-            $action_class = $this->actions[$this->action];
-            $action_instance = new $action_class();
-            return $action_instance->execute();
-        } else {
+        {
+            if (array_key_exists($this->action, $this->actions)) {
+                $action_class = $this->actions[$this->action];
+                $action_instance = new $action_class();
+                $content = $action_instance->execute();          // runs first, may set the title
+                return Layout::render($action_instance->getTitle(), $content);
+            }
             throw new DispatchException("Action '{$this->action}' not found");
         }
-    }
 }

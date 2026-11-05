@@ -5,8 +5,10 @@ require_once('src/classes/TouiteRepository.php');
 use iutnc\sae\Touite;
 use iutnc\sae\TouiteRepository;
 
-class PublierAction
+class PublierAction extends Action
 {
+    protected string $title = 'Touiter';
+
     public function execute(): string {
         TouiteRepository::setConfig('config.db.ini');
         $repository=TouiteRepository::getInstance();
