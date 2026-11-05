@@ -4,6 +4,10 @@ declare (strict_types=1);
 
 namespace iutnc\sae\actions;
 
+require_once('src/classes/TouiteRepository.php');
+use iutnc\sae\Touite;
+use iutnc\sae\TouiteRepository;
+
 
 class DefaultAction extends Action
 {
@@ -11,6 +15,10 @@ class DefaultAction extends Action
 
     public function execute(): string
     {
+        TouiteRepository::setConfig('config.db.ini');
+        $repository=TouiteRepository::getInstance();
+        $t=$repository->donnerTouite(1);
+        var_dump($t);
         return <<<HTML
         <h2>Derniers touites</h2>
         <article class="touite">

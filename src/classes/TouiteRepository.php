@@ -2,6 +2,9 @@
 
 namespace iutnc\sae;
 
+require_once('src/classes/Touite.php');
+use iutnc\sae\Touite;
+
 class TouiteRepository
 {
     private \PDO $pdo;
@@ -29,15 +32,22 @@ class TouiteRepository
     . ';dbname=' . $conf['database']
     . ';charset=utf8','user'=> $conf['username'],'pass'=> $conf['password'] ];
     }
-    public function donnerTruc(string $name){
-        $query = "SELECT * from touite where utilisateur=:utilisateur";
+    public function donnerTouite(int $id):Touite{
+        $query = "SELECT * from touite where id=:id";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['utilisateur' => $name]);
+        $stmt->execute(['id' => $id]);
         $rep=$stmt->fetch();
         if ($rep===false){
             $rep="aucun résultat trouvé";
+            $t=new Touite("","",[]);
+        }else{
+            $query= "SELECT username from Utilisateur where id=:idu";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['idu'=>$rep[0]]);
+            $re=$stmt->fetch();
+            $t=new Touite($rep[1],$re[0],[]);
         }
-        return $rep;
+        return $t;
     }
 
     public function ecrireTouite(string $utilisateur, string $texte){
