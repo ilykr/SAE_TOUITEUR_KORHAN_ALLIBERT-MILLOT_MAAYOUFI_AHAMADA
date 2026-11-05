@@ -18,10 +18,6 @@ use iutnc\sae\actions\ProfilAction;
 use iutnc\sae\actions\TouiteAction;
 use iutnc\sae\actions\TagAction;
 
-
-$t=new Touite("a","b",["#l","#o"]);
-echo $t;
-
 $pdo=TouiteRepository::setConfig('config.db.ini');
 $repository=TouiteRepository::getInstance($pdo);
 
