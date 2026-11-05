@@ -17,8 +17,11 @@ class DefaultAction extends Action
     {
         TouiteRepository::setConfig('config.db.ini');
         $repository=TouiteRepository::getInstance();
-        $t=$repository->donnerTouite(1);
-        var_dump($t);
+        $i=$repository->donnerIdVieux();
+        while($i>0){
+            var_dump($repository->donnerTouite($i));
+            $i--;
+        }
         return <<<HTML
         <h2>Derniers touites</h2>
         <article class="touite">

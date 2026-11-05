@@ -32,6 +32,20 @@ class TouiteRepository
     . ';dbname=' . $conf['database']
     . ';charset=utf8','user'=> $conf['username'],'pass'=> $conf['password'] ];
     }
+
+    public function donnerIdVieux():int{
+        $query="SELECT MAX(id) FROM touite";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rep=$stmt->fetch();
+        if ($rep===false){
+            $i=0;
+        }else{
+            $i=$rep[0];
+        }
+        return $i;
+    }
+
     public function donnerTouite(int $id):Touite{
         $query = "SELECT * from touite where id=:id";
         $stmt = $this->pdo->prepare($query);
