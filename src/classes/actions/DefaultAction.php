@@ -5,7 +5,6 @@ declare (strict_types=1);
 namespace iutnc\sae\actions;
 
 require_once('src/classes/TouiteRepository.php');
-use iutnc\sae\Touite;
 use iutnc\sae\TouiteRepository;
 
 
@@ -16,19 +15,29 @@ class DefaultAction extends Action
     public function execute(): string
     {
         TouiteRepository::setConfig('config.db.ini');
-        $repository=TouiteRepository::getInstance();
-        $i=$repository->donnerIdVieux();
-        while($i>0){
-            var_dump($repository->donnerTouite($i));
+        $repository = TouiteRepository::getInstance();
+
+        $html = '<h2>Derniers touites</h2>';
+
+        $i = $repository->donnerIdVieux();
+        $nbAffiches = 0;
+
+        // Du plus récent au plus ancien
+        while ($i > 0) {
+            $touite = $repository->donnerTouite($i);
+
+            // donnerTouite() renvoie un touite vide si l'id n'existe pas : on l'ignore
+            if ($touite->getTexte() !== '') {
+                $html .= $touite;   // appelle __toString()
+                $nbAffiches++;
+            }
             $i--;
         }
-        return <<<HTML
-        <h2>Derniers touites</h2>
-        <article class="touite">
-            <p><a href="?action=profil">John Doe</a> <span class="date">- 03/11/2026 14:30</span></p>
-            <p>Lorem ipsum... <a href="?action=tag">#web</a> ... <a href="?action=touite">Voir le détail</a></p>
-        </article>
-        <div class="pagination">...</div>
-HTML;
+
+        if ($nbAffiches === 0) {
+            $html .= '<p>Aucun touite pour le moment.</p>';
+        }
+
+        return $html;
     }
 }

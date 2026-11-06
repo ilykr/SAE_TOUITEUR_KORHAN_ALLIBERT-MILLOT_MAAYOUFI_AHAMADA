@@ -43,7 +43,7 @@ class TouiteRepository
         }else{
             $i=$rep[0];
         }
-        return $i;
+           return (int) ($rep[0] ?? 0);
     }
 
     public function donnerTouite(int $id):Touite{
