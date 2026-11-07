@@ -65,33 +65,52 @@ class TouiteRepository
     }
 
     public function ecrireTouite(string $utilisateur, string $texte){
-        $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['utilisateur' => $utilisateur]);
-        $rep=$stmt->fetch();
-        if ($rep===false){
-            $query="INSERT INTO Utilisateur (username) VALUES (:utilisateur)";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(['utilisateur' => $utilisateur]);
+        if ($utilisateur!=='' && $texte!==''){
             $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['utilisateur' => $utilisateur]);
             $rep=$stmt->fetch();
+            if ($rep===false){
+                $query="INSERT INTO Utilisateur (username) VALUES (:utilisateur)";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $utilisateur]);
+                $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $utilisateur]);
+                $rep=$stmt->fetch();
+            }
+            $query="INSERT INTO touite(iduser,texte) VALUES (:utilisateur,:texte)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte]);
+            // faire un insert dans touite tag en recuperant le tag avec le #
         }
-        $query="INSERT INTO touite(iduser,texte) VALUES (:utilisateur,:texte)";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte]);
+    }
 
-        // faire un insert dans touite tag en recuperant le tag avec le #
+    public function creerTag(array $tab){
+        if (count($tab)>0){
+            $found= $this->chercheTag($tab[0]);
+            $libelle='#'.$tab[0];
+            $desc=$tab[1];
+            if (count($found)>0){
+                echo 't';
+                $query="UPDATE Tags SET description=:desc WHERE libelle LIKE :libelle";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['desc' => $desc,'libelle' => $libelle]);
+            }else{
+                $query="INSERT INTO Tags (libelle,description) VALUES (:libelle,:desc)";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['desc' => $desc,'libelle' => $libelle]);
+            }
+        }
     }
 
     public function chercheTag(string $tag){
-        $query = "SELECT * FROM TOUITETAG WHERE TAG LIKE '#:tag'";
+        $query = "SELECT * FROM Tags WHERE libelle LIKE :libelle";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['tag' => $tag]);
+        $stmt->execute(['libelle' => '#'.$tag]);
         $rep=$stmt->fetch();
         if ($rep===false){
-            $rep="aucun résultat trouvé";
+            $rep=[];
         }
         return $rep;
     }

@@ -23,6 +23,7 @@ class Layout
         <nav>
             <a href="?action=default">Accueil</a>
             <a href="?action=publier">Publier un touite</a>
+            <a href="?action=tagcreate">Créer un tag</a>
         </nav>
     </header>
     <hr>
