@@ -14,7 +14,7 @@ class PublierAction extends Action
         $repository=TouiteRepository::getInstance();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $t = $this->traiterFormulaire();
-            $repository->ecrireTouite($t->getAuteur(), $t->getTexte());
+            $repository->ecrireTouite($t->getAuteur(), $t->getTexte(),$t->getTags());
         }
         return $this->afficherFormulaire();
     }

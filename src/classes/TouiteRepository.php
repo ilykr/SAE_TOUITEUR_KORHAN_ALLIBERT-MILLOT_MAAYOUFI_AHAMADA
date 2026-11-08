@@ -64,7 +64,7 @@ class TouiteRepository
         return $t;
     }
 
-    public function ecrireTouite(string $utilisateur, string $texte){
+    public function ecrireTouite(string $utilisateur, string $texte, array $tags){
         if ($utilisateur!=='' && $texte!==''){
             $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
             $stmt = $this->pdo->prepare($query);
@@ -82,7 +82,26 @@ class TouiteRepository
             $query="INSERT INTO touite(iduser,texte) VALUES (:utilisateur,:texte)";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte]);
+            
             // faire un insert dans touite tag en recuperant le tag avec le #
+            if (count($tags)>0){
+                $idto=$this->donnerIdVieux();
+                foreach($tags as $tag){
+                    $found=$this->chercheTag($tag);
+                    if (!(count($found)>0)){
+                        $this->creerTag([$tag,""]);
+                        $query="SELECT MAX(id) FROM Tags";
+                        $stmt = $this->pdo->prepare($query);
+                        $stmt->execute();
+                        $found=$stmt->fetch();
+                    }
+                    $found=$found[0];
+                    $query="INSERT INTO Touitetags(idtouite,idtag) VALUES (:idto,:idta)";
+                    $stmt = $this->pdo->prepare($query);
+                    $stmt->execute(['idto' => $idto,'idta' => $found]);
+                }
+            }
+            
         }
     }
 
@@ -122,6 +141,10 @@ class TouiteRepository
             }
             return array_reverse($ans);
         }
+    }
+
+    public function donnerTouiteTag(string $tag){
+        return [];
     }
 
     public function chercheTag(string $tag){
