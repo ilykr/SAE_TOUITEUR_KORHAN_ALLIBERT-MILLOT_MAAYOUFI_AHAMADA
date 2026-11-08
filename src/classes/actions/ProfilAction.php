@@ -4,25 +4,36 @@ declare (strict_types=1);
 
 namespace iutnc\sae\actions;
 
+require_once('src/classes/TouiteRepository.php');
+use iutnc\sae\TouiteRepository;
+
 class ProfilAction extends Action {
     protected string $title = 'Profil';
 
     public function execute():string {
-        return <<<HTML
-                    <h2>Touites de John Doe</h2>
-                    <article class="touite">
-                        <p><a href="?action=profil">John Doe</a> <span class="date">- 03/11/2026 14:30</span></p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="?action=tag">#web</a> ... <a href="?action=touite">Voir le détail</a></p>
-                    </article>
-                    <article class="touite">
-                        <p><a href="?action=profil">John Doe</a> <span class="date">- 03/11/2026 14:30</span></p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <a href="?action=tag">#web</a> ... <a href="?action=touite">Voir le détail</a></p>
-                    </article>
-                    <div class="pagination">
-                        <a href="?action=profil">&lt; Page précédente</a>
-                        <span>Page 1</span>
-                        <a href="?action=profil">Page suivante &gt;</a>
-                    </div>
-            HTML;
+        $user=$_GET['user'];
+
+        TouiteRepository::setConfig('config.db.ini');
+        $repository = TouiteRepository::getInstance();
+
+        $html = '<h2>Touites de '.$user.'</h2>';
+        $tab = $repository->donnerTouiteUser($user);
+        $nbAffiches = 0;
+
+        // Du plus récent au plus ancien
+        foreach($tab as $touite) {
+
+            // donnerTouite() renvoie un touite vide si l'id n'existe pas : on l'ignore
+            if ($touite->getTexte() !== '') {
+                $html .= $touite;   // appelle __toString()
+                $nbAffiches++;
+            }
+        }
+
+        if ($nbAffiches === 0) {
+            $html .= '<p>Aucun touite pour le moment.</p>';
+        }
+
+        return $html;
     }
 }

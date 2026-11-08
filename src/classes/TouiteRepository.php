@@ -104,6 +104,26 @@ class TouiteRepository
         }
     }
 
+    public function donnerTouiteUser(string $user):array{
+        $query="SELECT id FROM Utilisateur WHERE username LIKE :username";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['username' => $user]);
+        $rep=$stmt->fetch();
+        if ($rep===false){
+            return [];
+        }else{
+            $query="SELECT id FROM touite WHERE iduser=:idus";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['idus'=>$rep[0]]);
+            $re=$stmt->fetchAll();
+            $ans=[];
+            foreach ($re as $elt){
+                $ans[]=$this->donnerTouite($elt[0]);
+            }
+            return array_reverse($ans);
+        }
+    }
+
     public function chercheTag(string $tag){
         $query = "SELECT * FROM Tags WHERE libelle LIKE :libelle";
         $stmt = $this->pdo->prepare($query);
