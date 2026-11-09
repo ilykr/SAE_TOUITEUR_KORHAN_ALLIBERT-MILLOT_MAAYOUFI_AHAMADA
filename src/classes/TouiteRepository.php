@@ -64,7 +64,7 @@ class TouiteRepository
         return $t;
     }
 
-    public function ecrireTouite(string $utilisateur, string $texte, array $tags){
+    public function ecrireTouite(string $utilisateur, string $texte, array $tags,int $idimg){
         if ($utilisateur!=='' && $texte!==''){
             $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
             $stmt = $this->pdo->prepare($query);
@@ -79,9 +79,9 @@ class TouiteRepository
                 $stmt->execute(['utilisateur' => $utilisateur]);
                 $rep=$stmt->fetch();
             }
-            $query="INSERT INTO touite(iduser,texte) VALUES (:utilisateur,:texte)";
+            $query="INSERT INTO touite(iduser,texte,idimage) VALUES (:utilisateur,:texte,:idimg)";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte]);
+            $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte,'idimg' => $idimg]);
             
             // faire un insert dans touite tag en recuperant le tag avec le #
             if (count($tags)>0){
@@ -174,5 +174,51 @@ class TouiteRepository
             $rep=[];
         }
         return $rep;
+    }
+
+    public function actualiserImages(): void
+    {
+        $dossier = 'img/';
+
+        $fichiers = scandir($dossier);
+
+        foreach ($fichiers as $fichier) {
+
+            if ($fichier === '.' || $fichier === '..') {
+                continue;
+            }
+
+            $chemin = $dossier . $fichier;
+
+            // nom du fichier sans extension
+            $description = pathinfo($fichier, PATHINFO_FILENAME);
+
+            $stmt = $this->pdo->prepare(
+                "SELECT COUNT(*) FROM Image WHERE chemin = :chemin"
+            );
+            $stmt->execute(['chemin' => $chemin]);
+
+            if ($stmt->fetchColumn() == 0) {
+
+                $stmt = $this->pdo->prepare(
+                    "INSERT INTO Image (chemin, description)
+                    VALUES (:chemin, :description)"
+                );
+
+                $stmt->execute([
+                    'chemin' => $chemin,
+                    'description' => $description
+                ]);
+            }
+        }
+    }
+
+    public function chercheImages(): array {
+        $query = "SELECT * FROM Image";
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }

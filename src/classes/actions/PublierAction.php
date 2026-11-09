@@ -12,11 +12,14 @@ class PublierAction extends Action
     public function execute(): string {
         TouiteRepository::setConfig('config.db.ini');
         $repository=TouiteRepository::getInstance();
+        $repository->actualiserImages();
+        $images = $repository->chercheImages();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $t = $this->traiterFormulaire();
-            $repository->ecrireTouite($t->getAuteur(), $t->getTexte(),$t->getTags());
+            $imageId = $_POST['image'] ?? null;
+            $repository->ecrireTouite($t->getAuteur(), $t->getTexte(),$t->getTags(),(int) $imageId);
         }
-        return $this->afficherFormulaire();
+        return $this->afficherFormulaire($images);
     }
 
     private function traiterFormulaire(): Touite
@@ -40,19 +43,35 @@ class PublierAction extends Action
         return $touite;
     }
 
-    private function afficherFormulaire(): string
+    private function afficherFormulaire(array $images): string
     {
-        return <<<HTML
+        $html = '
         <h2>Publier un touite</h2>
         <form action="?action=publier" method="post">
-            <label for="utilisateur">Nom d'utilisateur</label>
+
+            <label for="utilisateur">Nom d\'utilisateur</label>
             <input type="text" id="utilisateur" name="utilisateur" required>
 
-            <label for="texte">Texte (235 caractères maximum, les tags commencent par #)</label>
+            <label for="texte">Texte</label>
             <textarea id="texte" name="texte" rows="5" maxlength="235" required></textarea>
 
+            <p>Choisissez une image :</p>
+        ';
+
+        foreach ($images as $img) {
+            $html .= '
+            <label style="margin-right:10px;">
+                <input type="radio" name="image" value="'.$img['ID'].'">
+                <img src="'.$img['CHEMIN'].'" width="100">
+            </label>
+            ';
+        }
+
+        $html .= '
             <p><button type="submit">Publier</button></p>
         </form>
-        HTML;
+        ';
+
+        return $html;
     }
 }
