@@ -94,8 +94,10 @@ class TouiteRepository
                         $stmt = $this->pdo->prepare($query);
                         $stmt->execute();
                         $found=$stmt->fetch();
+                        $found=$found[0];
+                    }else{
+                       $found=$found[1]; 
                     }
-                    $found=$found[0];
                     $query="INSERT INTO Touitetags(idtouite,idtag) VALUES (:idto,:idta)";
                     $stmt = $this->pdo->prepare($query);
                     $stmt->execute(['idto' => $idto,'idta' => $found]);
@@ -144,7 +146,23 @@ class TouiteRepository
     }
 
     public function donnerTouiteTag(string $tag){
-        return [];
+        $query="SELECT id FROM Tags WHERE libelle LIKE :libelle";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['libelle' => '#'.$tag]);
+        $rep=$stmt->fetch();
+        if ($rep===false){
+            return [];
+        }else{
+            $query="SELECT idtouite FROM Touitetags WHERE idtag=:idtag";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['idtag'=>$rep[0]]);
+            $re=$stmt->fetchAll();
+            $ans=[];
+            foreach ($re as $elt){
+                $ans[]=$this->donnerTouite($elt[0]);
+            }
+            return array_reverse($ans);
+        }
     }
 
     public function chercheTag(string $tag){
