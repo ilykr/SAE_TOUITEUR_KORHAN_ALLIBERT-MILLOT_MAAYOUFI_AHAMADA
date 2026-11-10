@@ -149,6 +149,31 @@ class TouiteRepository
         }
     }
 
+    public function suivreTag($utilisateur,$tag){
+        if ($utilisateur!==''){
+            $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $utilisateur]);
+            $rep=$stmt->fetch();
+            if ($rep===false){
+                $query="INSERT INTO Utilisateur (username) VALUES (:utilisateur)";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $utilisateur]);
+                $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $utilisateur]);
+                $rep=$stmt->fetch();
+            }
+            $query = "SELECT id FROM Tags WHERE libelle LIKE :libelle";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['libelle' => '#'.$tag]);
+            $re=$stmt->fetch();
+            $query="INSERT INTO AboTag (iduser,idtag) VALUES (:utilisateur,:tag)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $rep[0],'tag' => $re[0]]);
+        }
+    }
+
     public function creerTag(array $tab){
         if (count($tab)>0){
             $found= $this->chercheTag($tab[0]);

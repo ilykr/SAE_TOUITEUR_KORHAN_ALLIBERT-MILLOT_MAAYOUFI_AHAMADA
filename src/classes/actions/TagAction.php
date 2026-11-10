@@ -17,6 +17,17 @@ class TagAction extends Action {
         $repository = TouiteRepository::getInstance();
 
         $html = '<h2>Touites associés au tag #'.$tag.'</h2>';
+        $html .= '<form action="?action=tag&tag='.$tag.'" method="post">
+
+            <label for="utilisateur">Nom d\'utilisateur</label>
+            <input type="text" id="utilisateur" name="utilisateur" required>
+            <p><button type="submit" class="btn-abonner">S\'abonner</button></p>
+            </form>';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $follower = $_POST['utilisateur'];
+            $repository->suivreTag($follower,$tag);
+        }
         $tab = $repository->donnerTouiteTag($tag);
         $nbAffiches = 0;
 
