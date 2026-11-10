@@ -47,21 +47,26 @@ class TouiteRepository
     }
 
     public function donnerTouite(int $id):Touite{
-        $query = "SELECT * from touite where id=:id";
+        $query = "SELECT * FROM touite WHERE id=:id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         $rep=$stmt->fetch();
-        if ($rep===false){
-            $rep="aucun résultat trouvé";
-            $t=new Touite("","",[]);
-        }else{
-            $query= "SELECT username from Utilisateur where id=:idu";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(['idu'=>$rep[0]]);
-            $re=$stmt->fetch();
-            $t=new Touite($rep[1],$re[0],[]);
+        if ($rep===false) {
+            return new Touite("","",[]);
         }
-        return $t;
+
+        $query= "SELECT username FROM Utilisateur WHERE id=:idu";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['idu' => $rep['IDUSER']]);
+        $re=$stmt->fetch();
+
+        return new Touite(
+            (string) $rep['TEXTE'],
+            (string) $re[0],
+            [],
+            (int) $rep['ID'],
+            $rep['DATE']
+        );
     }
 
     public function ecrireTouite(string $utilisateur, string $texte, array $tags,int $idimg){

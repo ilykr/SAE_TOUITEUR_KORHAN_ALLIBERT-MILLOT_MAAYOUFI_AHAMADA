@@ -7,7 +7,13 @@ namespace iutnc\sae;
 class Touite
 {
 
-    public function __construct(protected String $texte, protected String $auteur, protected array $tags = []){}
+    public function __construct(
+        protected String $texte,
+        protected String $auteur,
+        protected array $tags = [],
+        protected ?int $id = null,        // new
+        protected ?string $date = null    // new
+    ){}
 
     public function getAuteur() { return $this->auteur; }
 
@@ -15,10 +21,23 @@ class Touite
 
     public function getTags(): array { return $this->tags; }
 
+    public function getId(): ?int { return $this->id; }
+
+    public function getDate(): ?string { return $this->date; }
+
     public function __toString():String{
+        return $this->render(false);
+    }
+
+    /**
+     * $detail = false -> version liste (avec le lien "...")
+     * $detail = true  -> version détaillée (sans le lien)
+     */
+    public function render(bool $detail = false): string
+    {
         $auteur = htmlspecialchars($this->auteur);
 
-        // On échappe le texte, puis on transforme chaque #tag en lien
+        // on echappe le texte, puis on transforme chaque #tag en lien
         $texte = htmlspecialchars($this->texte);
         $texte = preg_replace_callback(
             '/#([\p{L}\p{N}_]+)/u',
@@ -26,10 +45,25 @@ class Touite
             $texte
         );
 
+        // date (colonne DATE de la BDD)
+        $dateHtml = '';
+        if ($this->date !== null) {
+            $d = new \DateTime($this->date);
+            $dateHtml = '<p>Publié le : ' . $d->format('d/m/Y à H:i') . '</p>';
+        }
+
+        // lien "..." vers la vue détaillée (uniquement en mode liste)
+        $plus = '';
+        if (!$detail && $this->id !== null) {
+            $plus = '<p><a href="?action=touite&amp;id=' . $this->id . '">...</a></p>';
+        }
+
         return <<<HTML
         <article class="touite">
             <p>Auteur : <a href="?action=profil&amp;user={$auteur}">{$auteur}</a></p>
+            {$dateHtml}
             <p>{$texte}</p>
+            {$plus}
         </article>
         HTML;
     }

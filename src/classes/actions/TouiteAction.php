@@ -4,19 +4,30 @@ declare (strict_types=1);
 
 namespace iutnc\sae\actions;
 
+require_once('src/classes/TouiteRepository.php');
+use iutnc\sae\TouiteRepository;
+
 class TouiteAction extends Action{
     protected string $title = 'Touite';
 
     public function execute():string {
-        return <<<HTML
-                    <h2>Touite</h2>
-                    <article class="touite">
-                        <p>Auteur : <a href="?action=profil">John Doe</a></p>
-                        <p>Publié le : 03/11/2026 à 14:30</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<a href="?action=tag">#web</a> Mauris vulputate metus lorem, at elementum massa ornare maximus.<a href="?action=tag">#php</a></p>
-                        <p>Note : 3</p>
-                    </article>
-                    <p><a href="?action=default">&lt; Retour à la liste</a></p>
-            HTML;
+        $id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
+
+        if ($id === false || $id === null) {
+            return '<p>Touite invalide.</p><p><a href="?action=default">&lt; Retour à la liste</a></p>';
+        }
+
+        TouiteRepository::setConfig('config.db.ini');
+        $repository = TouiteRepository::getInstance();
+        $touite = $repository->donnerTouite($id);
+
+        // donnerTouite() renvoie un touite vide si l'id n'existe pas
+        if ($touite->getTexte() === '') {
+            return '<p>Ce touite n\'existe pas.</p><p><a href="?action=default">&lt; Retour à la liste</a></p>';
+        }
+
+        return '<h2>Touite</h2>'
+             . $touite->render(true)
+             . '<p><a href="?action=default">&lt; Retour à la liste</a></p>';
     }
 }
