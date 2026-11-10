@@ -17,6 +17,7 @@ class ProfilAction extends Action {
         $repository = TouiteRepository::getInstance();
 
         $html = '<h2>Touites de '.$user.'</h2>';
+         $html .= '<p><button type="button" class="btn-abonner">S\'abonner</button></p>';
         $tab = $repository->donnerTouiteUser($user);
         $nbAffiches = 0;
 
