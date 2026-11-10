@@ -34,7 +34,7 @@ class TouiteRepository
     }
 
     public function donnerIdVieux():int{
-        $query="SELECT MAX(id) FROM touite";
+        $query="SELECT MAX(id) FROM Touite";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $rep=$stmt->fetch();
@@ -47,7 +47,7 @@ class TouiteRepository
     }
 
     public function donnerTouite(int $id):Touite{
-        $query = "SELECT * FROM touite WHERE id=:id";
+        $query = "SELECT * FROM Touite WHERE id=:id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         $rep=$stmt->fetch();
@@ -96,7 +96,7 @@ class TouiteRepository
                 $stmt->execute(['utilisateur' => $utilisateur]);
                 $rep=$stmt->fetch();
             }
-            $query="INSERT INTO touite(iduser,texte,idimage) VALUES (:utilisateur,:texte,:idimg)";
+            $query="INSERT INTO Touite(iduser,texte,idimage) VALUES (:utilisateur,:texte,:idimg)";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte,'idimg' => $idimg]);
             
@@ -115,12 +115,37 @@ class TouiteRepository
                     }else{
                        $found=$found[1]; 
                     }
-                    $query="INSERT INTO Touitetags(idtouite,idtag) VALUES (:idto,:idta)";
+                    $query="INSERT INTO TouiteTags(idtouite,idtag) VALUES (:idto,:idta)";
                     $stmt = $this->pdo->prepare($query);
                     $stmt->execute(['idto' => $idto,'idta' => $found]);
                 }
             }
             
+        }
+    }
+
+    public function abonnerUtilisateur($utilisateur,$follow){
+        if ($utilisateur!==''){
+            $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $utilisateur]);
+            $rep=$stmt->fetch();
+            if ($rep===false){
+                $query="INSERT INTO Utilisateur (username) VALUES (:utilisateur)";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $utilisateur]);
+                $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $utilisateur]);
+                $rep=$stmt->fetch();
+            }
+            $query = "SELECT id FROM Utilisateur WHERE username LIKE :utilisateur";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $follow]);
+            $re=$stmt->fetch();
+            $query="INSERT INTO Abonnement (iduser,idfollow) VALUES (:utilisateur,:follow)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['utilisateur' => $rep[0],'follow' => $re[0]]);
         }
     }
 
@@ -130,7 +155,6 @@ class TouiteRepository
             $libelle='#'.$tab[0];
             $desc=$tab[1];
             if (count($found)>0){
-                echo 't';
                 $query="UPDATE Tags SET description=:desc WHERE libelle LIKE :libelle";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute(['desc' => $desc,'libelle' => $libelle]);
@@ -150,7 +174,7 @@ class TouiteRepository
         if ($rep===false){
             return [];
         }else{
-            $query="SELECT id FROM touite WHERE iduser=:idus";
+            $query="SELECT id FROM Touite WHERE iduser=:idus";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['idus'=>$rep[0]]);
             $re=$stmt->fetchAll();
@@ -170,7 +194,7 @@ class TouiteRepository
         if ($rep===false){
             return [];
         }else{
-            $query="SELECT idtouite FROM Touitetags WHERE idtag=:idtag";
+            $query="SELECT idtouite FROM TouiteTags WHERE idtag=:idtag";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['idtag'=>$rep[0]]);
             $re=$stmt->fetchAll();

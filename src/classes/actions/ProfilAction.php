@@ -17,7 +17,17 @@ class ProfilAction extends Action {
         $repository = TouiteRepository::getInstance();
 
         $html = '<h2>Touites de '.$user.'</h2>';
-         $html .= '<p><button type="button" class="btn-abonner">S\'abonner</button></p>';
+        $html .= '<form action="?action=profil&user='.$user.'" method="post">
+
+            <label for="utilisateur">Nom d\'utilisateur</label>
+            <input type="text" id="utilisateur" name="utilisateur" required>
+            <p><button type="submit" class="btn-abonner">S\'abonner</button></p>
+            </form>';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $follower = $_POST['utilisateur'];
+            $repository->abonnerUtilisateur($follower,$user);
+        }
         $tab = $repository->donnerTouiteUser($user);
         $nbAffiches = 0;
 

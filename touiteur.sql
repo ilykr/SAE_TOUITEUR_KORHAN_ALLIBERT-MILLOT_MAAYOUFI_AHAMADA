@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db
--- Généré le : mar. 10 nov. 2026 à 07:17
+-- Généré le : mar. 10 nov. 2026 à 09:35
 -- Version du serveur : 12.3.3-MariaDB-ubu2404
 -- Version de PHP : 8.3.33
 
@@ -24,13 +24,43 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `Abonnement`
+--
+
+CREATE TABLE `Abonnement` (
+  `IDUSER` int(11) NOT NULL,
+  `IDFOLLOW` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `Abonnement`
+--
+
+INSERT INTO `Abonnement` (`IDUSER`, `IDFOLLOW`) VALUES
+(2, 1),
+(3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `AboTag`
+--
+
+CREATE TABLE `AboTag` (
+  `IDUSER` int(11) NOT NULL,
+  `IDTAG` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `Image`
 --
 
 CREATE TABLE `Image` (
-  `DESCRIPTION` varchar(50) NOT NULL,
+  `DESCRIPTION` varchar(50) DEFAULT NULL,
   `ID` int(11) NOT NULL,
-  `CHEMIN` varchar(235) DEFAULT NULL
+  `CHEMIN` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -38,8 +68,8 @@ CREATE TABLE `Image` (
 --
 
 INSERT INTO `Image` (`DESCRIPTION`, `ID`, `CHEMIN`) VALUES
-('sunna', 4, 'img/sunna.jpeg'),
-('Robin', 5, 'img/Robin.jpeg');
+('Robin', 1, 'img/Robin.jpeg'),
+('sunna', 2, 'img/sunna.jpeg');
 
 -- --------------------------------------------------------
 
@@ -58,65 +88,48 @@ CREATE TABLE `Tags` (
 --
 
 INSERT INTO `Tags` (`LIBELLE`, `ID`, `DESCRIPTION`) VALUES
-('#test', 16, 'test mais c\'est mieux'),
-('#try', 17, 'essai'),
-('#randomkid', 18, '');
+('#randomkid', 1, 'poperidu type shi'),
+('#test', 2, 'testing');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `touite`
+-- Structure de la table `Touite`
 --
 
-CREATE TABLE `touite` (
+CREATE TABLE `Touite` (
   `IDUSER` int(11) NOT NULL,
-  `TEXTE` varchar(235) DEFAULT NULL,
+  `TEXTE` varchar(235) NOT NULL,
   `DATE` timestamp NOT NULL DEFAULT current_timestamp(),
   `IDIMAGE` int(11) DEFAULT NULL,
   `ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `touite`
+-- Déchargement des données de la table `Touite`
 --
 
-INSERT INTO `touite` (`IDUSER`, `TEXTE`, `DATE`, `IDIMAGE`, `ID`) VALUES
-(3, 'ahaaha', '2026-11-04 10:35:36', NULL, 1),
-(3, 'dude are you real?', '2026-11-05 14:59:08', NULL, 2),
-(4, 'dude, i think i am?', '2026-11-05 14:59:33', NULL, 3),
-(5, 'that\'s actually some pretty solid evidence', '2026-11-05 15:00:09', NULL, 4),
-(4, 'René Descartes???!', '2026-11-05 15:00:29', NULL, 5),
-(3, 'René Descartes???!', '2026-11-05 15:00:47', NULL, 6),
-(6, 'has anyone seen sunna?', '2026-11-07 22:48:29', NULL, 7),
-(6, 'Stop saying I\'m a clanker, it\'s very inappropriate', '2026-11-08 17:36:52', NULL, 8),
-(7, 'lod#l', '2026-11-08 18:10:06', NULL, 9),
-(7, 'idk bro #try', '2026-11-08 18:33:48', NULL, 10),
-(8, 'wat about now #try', '2026-11-09 15:28:53', NULL, 12),
-(9, 'i am inside of a bus rn #randomkid', '2026-11-09 15:30:27', NULL, 13),
-(10, 'who is this random kid????? #randomkid', '2026-11-09 16:59:25', 4, 14),
-(10, 'who is this random kid????? #randomkid', '2026-11-09 17:00:23', 4, 15);
+INSERT INTO `Touite` (`IDUSER`, `TEXTE`, `DATE`, `IDIMAGE`, `ID`) VALUES
+(1, 'where is sunna? #randomkid', '2026-11-10 09:30:14', 2, 5),
+(3, 'met this lady on the bus', '2026-11-10 09:34:48', 1, 6);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Touitetags`
+-- Structure de la table `TouiteTags`
 --
 
-CREATE TABLE `Touitetags` (
-  `IDTOUITE` int(11) NOT NULL,
-  `IDTAG` int(11) DEFAULT NULL
+CREATE TABLE `TouiteTags` (
+  `IDTAG` int(11) DEFAULT NULL,
+  `IDTOUITE` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `Touitetags`
+-- Déchargement des données de la table `TouiteTags`
 --
 
-INSERT INTO `Touitetags` (`IDTOUITE`, `IDTAG`) VALUES
-(10, 17),
-(12, 17),
-(13, 18),
-(14, 18),
-(15, 18);
+INSERT INTO `TouiteTags` (`IDTAG`, `IDTOUITE`) VALUES
+(1, 5);
 
 -- --------------------------------------------------------
 
@@ -129,27 +142,36 @@ CREATE TABLE `Utilisateur` (
   `ID` int(11) NOT NULL,
   `PRENOM` varchar(20) DEFAULT NULL,
   `MAIL` varchar(50) DEFAULT NULL,
-  `NB` int(11) DEFAULT NULL,
-  `USERNAME` varchar(20) DEFAULT NULL
+  `nbtouites` int(11) NOT NULL DEFAULT 0,
+  `username` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `Utilisateur`
 --
 
-INSERT INTO `Utilisateur` (`NOM`, `ID`, `PRENOM`, `MAIL`, `NB`, `USERNAME`) VALUES
-(NULL, 3, NULL, NULL, NULL, 'mld'),
-(NULL, 4, NULL, NULL, NULL, 'mlb'),
-(NULL, 5, NULL, NULL, NULL, 'René Descartes'),
-(NULL, 6, NULL, NULL, NULL, 'Aria'),
-(NULL, 7, NULL, NULL, NULL, 'unwise'),
-(NULL, 8, NULL, NULL, NULL, 'john doe'),
-(NULL, 9, NULL, NULL, NULL, 'sunna'),
-(NULL, 10, NULL, NULL, NULL, 'robin');
+INSERT INTO `Utilisateur` (`NOM`, `ID`, `PRENOM`, `MAIL`, `nbtouites`, `username`) VALUES
+(NULL, 1, NULL, NULL, 0, 'aria'),
+(NULL, 2, NULL, NULL, 0, 'sonbringer'),
+(NULL, 3, NULL, NULL, 0, 'sunna');
 
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `Abonnement`
+--
+ALTER TABLE `Abonnement`
+  ADD KEY `fk_abonnement_follow` (`IDUSER`),
+  ADD KEY `fk_abonnement_following` (`IDFOLLOW`);
+
+--
+-- Index pour la table `AboTag`
+--
+ALTER TABLE `AboTag`
+  ADD KEY `fk_tag` (`IDTAG`),
+  ADD KEY `fk_usertag` (`IDUSER`);
 
 --
 -- Index pour la table `Image`
@@ -164,25 +186,27 @@ ALTER TABLE `Tags`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Index pour la table `touite`
+-- Index pour la table `Touite`
 --
-ALTER TABLE `touite`
+ALTER TABLE `Touite`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `fk_image` (`IDIMAGE`),
   ADD KEY `fk_utilisateur` (`IDUSER`);
 
 --
--- Index pour la table `Touitetags`
+-- Index pour la table `TouiteTags`
 --
-ALTER TABLE `Touitetags`
-  ADD KEY `fk_tags` (`IDTAG`),
-  ADD KEY `fk_touites` (`IDTOUITE`);
+ALTER TABLE `TouiteTags`
+  ADD KEY `fk_touite` (`IDTOUITE`),
+  ADD KEY `fk_tags` (`IDTAG`);
 
 --
 -- Index pour la table `Utilisateur`
 --
 ALTER TABLE `Utilisateur`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `un_utilisateur_username` (`username`),
+  ADD UNIQUE KEY `un_utilisateur_id` (`ID`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -192,43 +216,57 @@ ALTER TABLE `Utilisateur`
 -- AUTO_INCREMENT pour la table `Image`
 --
 ALTER TABLE `Image`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `Tags`
 --
 ALTER TABLE `Tags`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `touite`
+-- AUTO_INCREMENT pour la table `Touite`
 --
-ALTER TABLE `touite`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+ALTER TABLE `Touite`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `Utilisateur`
 --
 ALTER TABLE `Utilisateur`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `touite`
+-- Contraintes pour la table `Abonnement`
 --
-ALTER TABLE `touite`
+ALTER TABLE `Abonnement`
+  ADD CONSTRAINT `fk_abonnement_following` FOREIGN KEY (`IDFOLLOW`) REFERENCES `Utilisateur` (`ID`),
+  ADD CONSTRAINT `fk_abonnement_user` FOREIGN KEY (`IDUSER`) REFERENCES `Utilisateur` (`ID`);
+
+--
+-- Contraintes pour la table `AboTag`
+--
+ALTER TABLE `AboTag`
+  ADD CONSTRAINT `fk_tag` FOREIGN KEY (`IDTAG`) REFERENCES `Tags` (`ID`),
+  ADD CONSTRAINT `fk_usertag` FOREIGN KEY (`IDUSER`) REFERENCES `Utilisateur` (`ID`);
+
+--
+-- Contraintes pour la table `Touite`
+--
+ALTER TABLE `Touite`
   ADD CONSTRAINT `fk_image` FOREIGN KEY (`IDIMAGE`) REFERENCES `Image` (`ID`),
   ADD CONSTRAINT `fk_utilisateur` FOREIGN KEY (`IDUSER`) REFERENCES `Utilisateur` (`ID`);
 
 --
--- Contraintes pour la table `Touitetags`
+-- Contraintes pour la table `TouiteTags`
 --
-ALTER TABLE `Touitetags`
+ALTER TABLE `TouiteTags`
   ADD CONSTRAINT `fk_tags` FOREIGN KEY (`IDTAG`) REFERENCES `Tags` (`ID`),
-  ADD CONSTRAINT `fk_touites` FOREIGN KEY (`IDTOUITE`) REFERENCES `touite` (`ID`);
+  ADD CONSTRAINT `fk_touite` FOREIGN KEY (`IDTOUITE`) REFERENCES `Touite` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
