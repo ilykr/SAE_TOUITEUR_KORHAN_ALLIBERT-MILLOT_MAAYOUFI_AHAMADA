@@ -33,6 +33,7 @@ class TouiteRepository
     . ';charset=utf8','user'=> $conf['username'],'pass'=> $conf['password'] ];
     }
 
+
     public function donnerIdVieux():int{
         $query="SELECT MAX(id) FROM Touite";
         $stmt = $this->pdo->prepare($query);
@@ -96,9 +97,15 @@ class TouiteRepository
                 $stmt->execute(['utilisateur' => $utilisateur]);
                 $rep=$stmt->fetch();
             }
-            $query="INSERT INTO Touite(iduser,texte,idimage) VALUES (:utilisateur,:texte,:idimg)";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte,'idimg' => $idimg]);
+            if ($idimg===0){
+                $query="INSERT INTO Touite(iduser,texte) VALUES (:utilisateur,:texte)";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte]);
+            }else{
+                $query="INSERT INTO Touite(iduser,texte,idimage) VALUES (:utilisateur,:texte,:idimg)";
+                $stmt = $this->pdo->prepare($query);
+                $stmt->execute(['utilisateur' => $rep[0],'texte' => $texte,'idimg' => $idimg]);
+            }
             
             // faire un insert dans touite tag en recuperant le tag avec le #
             if (count($tags)>0){
