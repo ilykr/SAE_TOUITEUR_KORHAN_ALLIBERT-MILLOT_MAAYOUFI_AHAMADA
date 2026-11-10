@@ -60,12 +60,24 @@ class TouiteRepository
         $stmt->execute(['idu' => $rep['IDUSER']]);
         $re=$stmt->fetch();
 
+        $path='';
+
+        if($rep['IDIMAGE']!==null){
+            $query= "SELECT chemin FROM Image WHERE id=:idm";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['idm' => $rep['IDIMAGE']]);
+            $r=$stmt->fetch();
+            $path='<img src='.$r[0].'/>';
+        }
+        
+
         return new Touite(
             (string) $rep['TEXTE'],
             (string) $re[0],
             [],
             (int) $rep['ID'],
-            $rep['DATE']
+            $rep['DATE'],
+            $path
         );
     }
 

@@ -11,8 +11,9 @@ class Touite
         protected String $texte,
         protected String $auteur,
         protected array $tags = [],
-        protected ?int $id = null,        // new
-        protected ?string $date = null    // new
+        protected ?int $id = null,
+        protected ?string $date = null,
+        protected ?string $chemin = null
     ){}
 
     public function getAuteur() { return $this->auteur; }
@@ -24,6 +25,8 @@ class Touite
     public function getId(): ?int { return $this->id; }
 
     public function getDate(): ?string { return $this->date; }
+
+    public function getImage(): ?string { return $this->chemin; }
 
     public function __toString():String{
         return $this->render(false);
@@ -56,6 +59,8 @@ class Touite
         $plus = '';
         if (!$detail && $this->id !== null) {
             $plus = '<p><a href="?action=touite&amp;id=' . $this->id . '">...</a></p>';
+        }else{
+            $plus = $this->chemin;
         }
 
         return <<<HTML
