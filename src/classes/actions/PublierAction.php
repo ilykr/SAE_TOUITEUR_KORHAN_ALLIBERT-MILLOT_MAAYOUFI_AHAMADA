@@ -33,7 +33,7 @@ class PublierAction extends Action
             return $touiteVide;
         }
 
-        // Extraction des tags : #mot | A REFAIRE!!!
+        
         preg_match_all('/#([\p{L}\p{N}_]+)/u', $texte, $matches);
         $tags = array_values(array_unique($matches[1]));
 

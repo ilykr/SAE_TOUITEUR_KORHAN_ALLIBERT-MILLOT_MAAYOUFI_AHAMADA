@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db
--- Généré le : ven. 13 nov. 2026 à 10:46
+-- Généré le : ven. 13 nov. 2026 à 18:02
 -- Version du serveur : 12.3.3-MariaDB-ubu2404
 -- Version de PHP : 8.3.33
 
@@ -39,7 +39,14 @@ CREATE TABLE `Abonnement` (
 INSERT INTO `Abonnement` (`IDUSER`, `IDFOLLOW`) VALUES
 (2, 1),
 (3, 1),
-(1, 3);
+(1, 3),
+(4, 1),
+(1, 3),
+(4, 3),
+(2, 3),
+(5, 3),
+(4, 6),
+(1, 6);
 
 --
 -- Déclencheurs `Abonnement`
@@ -96,7 +103,8 @@ CREATE TABLE `Image` (
 
 INSERT INTO `Image` (`DESCRIPTION`, `ID`, `CHEMIN`) VALUES
 ('Robin', 1, 'img/Robin.jpeg'),
-('sunna', 2, 'img/sunna.jpeg');
+('sunna', 2, 'img/sunna.jpeg'),
+('randomkid', 3, 'img/randomkid.gif');
 
 -- --------------------------------------------------------
 
@@ -147,7 +155,8 @@ INSERT INTO `Touite` (`IDUSER`, `TEXTE`, `DATE`, `IDIMAGE`, `ID`) VALUES
 (5, 'tesst', '2026-11-10 13:46:26', 2, 13),
 (1, 'count again', '2026-11-10 13:53:25', 1, 14),
 (1, 'image test', '2026-11-10 14:02:58', NULL, 16),
-(3, '#t #l #i #m', '2026-11-12 08:09:31', NULL, 17);
+(3, '#t #l #i #m', '2026-11-12 08:09:31', NULL, 17),
+(6, 'this might be the best gif i have ever seen\r\n\r\n#randomkid', '2026-11-13 17:40:30', 3, 18);
 
 --
 -- Déclencheurs `Touite`
@@ -206,7 +215,8 @@ INSERT INTO `TouiteTags` (`IDTAG`, `IDTOUITE`) VALUES
 (3, 17),
 (4, 17),
 (5, 17),
-(6, 17);
+(6, 17),
+(1, 18);
 
 -- --------------------------------------------------------
 
@@ -232,7 +242,8 @@ INSERT INTO `Utilisateur` (`NOM`, `ID`, `PRENOM`, `MAIL`, `nbtouites`, `username
 (NULL, 2, NULL, NULL, 0, 'sonbringer'),
 (NULL, 3, NULL, NULL, 1, 'sunna'),
 (NULL, 4, NULL, NULL, 0, 'lycaon'),
-(NULL, 5, NULL, NULL, 0, 'new guy');
+(NULL, 5, NULL, NULL, 0, 'new guy'),
+(NULL, 6, NULL, NULL, 1, 'PopEridu');
 
 --
 -- Index pour les tables déchargées
@@ -295,7 +306,7 @@ ALTER TABLE `Utilisateur`
 -- AUTO_INCREMENT pour la table `Image`
 --
 ALTER TABLE `Image`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `Tags`
@@ -307,13 +318,13 @@ ALTER TABLE `Tags`
 -- AUTO_INCREMENT pour la table `Touite`
 --
 ALTER TABLE `Touite`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `Utilisateur`
 --
 ALTER TABLE `Utilisateur`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
