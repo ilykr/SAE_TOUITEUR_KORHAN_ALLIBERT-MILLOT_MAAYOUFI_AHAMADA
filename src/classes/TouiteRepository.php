@@ -249,6 +249,35 @@ class TouiteRepository
         return $rep;
     }
 
+    public function donnerPage(string $user){
+        $query="SELECT DISTINCT(Touite.ID)
+                FROM Touite
+                LEFT JOIN Abonnement ON Abonnement.IDFOLLOW = Touite.IDUSER 
+                LEFT JOIN Utilisateur ON Utilisateur.ID = Abonnement.IDUSER
+                WHERE USERNAME = :username
+
+                UNION 
+
+                SELECT DISTINCT(IDTOUITE)
+                FROM AboTag
+                LEFT JOIN TouiteTags ON TouiteTags.IDTAG = AboTag.IDTAG
+                LEFT JOIN Utilisateur ON Utilisateur.ID = AboTag.IDUSER 
+                WHERE USERNAME = :username
+                ORDER BY ID DESC;";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['username' => $user]);
+        $rep=$stmt->fetchAll();
+        if ($rep===false){
+            return [];
+        }else{
+            $ans=[];
+            foreach ($rep as $elt){
+                $ans[]=$this->donnerTouite($elt[0]);
+            }
+            return $ans;
+        }
+    }
+
     public function actualiserImages(): void
     {
         $dossier = 'img/';
