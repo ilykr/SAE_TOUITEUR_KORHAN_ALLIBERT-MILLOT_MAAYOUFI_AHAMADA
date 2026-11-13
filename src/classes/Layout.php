@@ -24,6 +24,8 @@ class Layout
             <a href="?action=default">Accueil</a>
             <a href="?action=publier">Publier un touite</a>
             <a href="?action=tagcreate">Créer un tag</a>
+            <a href="?action=pourvous">Pour toi</a>
+            <a href="?action=topfollowers">Top abonnés</a>
         </nav>
     </header>
     <hr>

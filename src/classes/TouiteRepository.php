@@ -272,10 +272,28 @@ class TouiteRepository
         }else{
             $ans=[];
             foreach ($rep as $elt){
+                if ($elt[0] === null) { continue; } // tag suivi sans touite
                 $ans[]=$this->donnerTouite($elt[0]);
             }
             return $ans;
         }
+    }
+
+    /**
+     * Retourne les comptes triés par nombre d'abonnés (décroissant).
+     */
+    public function donnerTopFollowers(int $limite = 10): array
+    {
+        $query = "SELECT u.username, COUNT(a.IDUSER) AS nb
+                  FROM Utilisateur u
+                  LEFT JOIN Abonnement a ON a.IDFOLLOW = u.ID
+                  GROUP BY u.ID, u.username
+                  ORDER BY nb DESC, u.username ASC
+                  LIMIT :limite";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindValue(':limite', $limite, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public function actualiserImages(): void

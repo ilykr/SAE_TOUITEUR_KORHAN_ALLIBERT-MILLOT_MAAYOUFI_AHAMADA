@@ -36,7 +36,7 @@ class ProfilAction extends Action {
 
             // donnerTouite() renvoie un touite vide si l'id n'existe pas : on l'ignore
             if ($touite->getTexte() !== '') {
-                $html .= $touite;   // appelle __toString()
+                $html .= $touite;
                 $nbAffiches++;
             }
         }

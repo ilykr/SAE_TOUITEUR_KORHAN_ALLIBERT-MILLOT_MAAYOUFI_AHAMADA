@@ -25,8 +25,8 @@ class PublierAction extends Action
     private function traiterFormulaire(): Touite
     {
         // Nettoyage des entrées
-        $auteur = $_POST['utilisateur']; //trim(filter_var($_POST['utilisateur'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
-        $texte  = $_POST['texte']; //trim(filter_var($_POST['texte'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
+        $auteur = $_POST['utilisateur'];
+        $texte  = $_POST['texte'];
 
         if ($auteur === '' || $texte === '') {
             $touiteVide = new Touite("","", []);

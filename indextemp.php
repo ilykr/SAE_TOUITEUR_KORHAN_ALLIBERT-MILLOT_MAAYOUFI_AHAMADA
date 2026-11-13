@@ -18,6 +18,8 @@ use iutnc\sae\actions\ProfilAction;
 use iutnc\sae\actions\TouiteAction;
 use iutnc\sae\actions\TagAction;
 use iutnc\sae\actions\CreateTagAction;
+use iutnc\sae\actions\TopFollowerAction;
+use iutnc\sae\actions\PourVousAction;
 
 $pdo=TouiteRepository::setConfig('config.db.ini');
 $repository=TouiteRepository::getInstance($pdo);
@@ -30,5 +32,7 @@ $disp->addDispatch('profil', ProfilAction::class);
 $disp->addDispatch('touite', TouiteAction::class);
 $disp->addDispatch('tag', TagAction::class);
 $disp->addDispatch('tagcreate', CreateTagAction::class);
+$disp->addDispatch('topfollowers', TopFollowerAction::class);
+$disp->addDispatch('pourvous', PourVousAction::class);
 
 echo $disp->run();

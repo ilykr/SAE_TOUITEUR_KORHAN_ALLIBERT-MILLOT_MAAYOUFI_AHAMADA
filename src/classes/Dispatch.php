@@ -31,7 +31,7 @@ class Dispatch
             if (array_key_exists($this->action, $this->actions)) {
                 $action_class = $this->actions[$this->action];
                 $action_instance = new $action_class();
-                $content = $action_instance->execute();          // runs first, may set the title
+                $content = $action_instance->execute();
                 return Layout::render($action_instance->getTitle(), $content);
             }
             throw new DispatchException("Action '{$this->action}' not found");
