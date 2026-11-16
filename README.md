@@ -21,3 +21,5 @@ Suivre des utilisateurs
 S’abonner à un tag
 Associer une image à un touite
 Les influenceurs
+
+Lien du site sur le webetu : https://webetu.iutnc.univ-lorraine.fr/~e24719u/SAE_TOUITEUR_KORHAN_ALLIBERT-MILLOT_MAAYOUFI_AHAMADA/
